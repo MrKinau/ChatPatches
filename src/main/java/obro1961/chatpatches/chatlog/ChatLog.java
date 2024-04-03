@@ -81,7 +81,7 @@ public class ChatLog {
                 rawData = Files.readString(PATH);
 
             } catch(MalformedInputException notUTF8) { // thrown if the file is not encoded with UTF-8
-                ChatPatches.LOGGER.warn("[ChatLog.deserialize] ChatLog file encoding was '{}', not UTF-8. Complex text characters may have been replaced with question marks.", Charset.defaultCharset().name());
+                ChatPatches.LOGGER.warn("[ChatLog.deserialize] Chat log file encoding was '{}', not UTF-8. Complex text characters may have been replaced with question marks.", Charset.defaultCharset().name());
 
                 try {
                     // force-writes the string as UTF-8
@@ -89,19 +89,19 @@ public class ChatLog {
                     rawData = Files.readString(PATH);
 
                 } catch(IOException ioexc) {
-                    ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't rewrite the ChatLog at '{}', resetting:", PATH, ioexc);
+                    ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't rewrite the chat log at '{}', resetting:", PATH, ioexc);
 
                     // final attempt to reset the file
                     try {
                         rawData = Data.EMPTY_DATA; // just in case of corruption from previous failures
                         Files.writeString(PATH, Data.EMPTY_DATA, StandardOpenOption.TRUNCATE_EXISTING);
                     } catch(IOException ioerr) {
-                        ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't reset the ChatLog at '{}':", PATH, ioerr);
+                        ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't reset the chat log at '{}':", PATH, ioerr);
                     }
                 }
 
             } catch(IOException e) {
-                ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't access the ChatLog at '{}':", PATH, e);
+                ChatPatches.LOGGER.error("[ChatLog.deserialize] Couldn't access the chat log at '{}':", PATH, e);
                 rawData = Data.EMPTY_DATA; // just in case of corruption from failures
             }
         } else {

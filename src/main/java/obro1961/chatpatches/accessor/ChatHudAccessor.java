@@ -23,13 +23,16 @@ public interface ChatHudAccessor {
         return from(client.inGameHud.getChatHud());
     }
 
+    //todo: decide in the future if i should add the prefix back, and also re-eval what access is still needed here
     // unique methods, not present in ChatHud
     /** {@link ChatHud#messages} */
-    List<ChatHudLine> chatpatches$getMessages();
+    List<ChatHudLine> getMessages();
     /** {@link ChatHud#visibleMessages} */
-    List<ChatHudLine.Visible> chatpatches$getVisibleMessages();
+    List<ChatHudLine.Visible> getVisibleMessages();
+    /** {@link ChatHud#removalQueue} */
+    List<?> getRemovalQueue();
     /** {@link ChatHud#scrolledLines} */
-    int chatpatches$getScrolledLines();
+    int getScrolledLines();
 
     // renamed methods to access-widen them from ChatHud
     /** {@link ChatHud#getMessageLineIndex(double, double)} */

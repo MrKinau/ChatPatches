@@ -10,6 +10,7 @@ import net.minecraft.util.Util;
 import net.minecraft.util.math.MathHelper;
 import obro1961.chatpatches.ChatPatches;
 import obro1961.chatpatches.accessor.ChatHudAccessor;
+import obro1961.chatpatches.api.ChatHudPatches;
 import obro1961.chatpatches.chatlog.ChatLog;
 import obro1961.chatpatches.mixin.gui.ChatHudMixin;
 import org.jetbrains.annotations.NotNull;
@@ -161,14 +162,14 @@ public class ChatUtils {
 	 *   <li>If the message shouldn't be formatted (doesn't satisfy all
 	 *   prerequisites), then don't change {@code m} and store it.</li>
 	 * 	 <li>Assemble the constructed message and add a duplicate counter
-	 * 	 according to the {@link ChatHudMixin#addCounter(Text, boolean)} method.</li>
+	 * 	 according to the {@link ChatHudPatches#addCounter(Text)} method.</li>
 	 * 	 <li>Log the modified message in the {@code ChatLog}.</li>
 	 * 	 <li>Reset the {@link ChatPatches#msgData} to prevent an uncommon bug.</li>
 	 * 	 <li>Return the modified message, regardless of if it was</li>
 	 * </ol>
 	 */
-	public static Text modifyMessage(@NotNull Text m, boolean refreshing) {
-		if( refreshing || Flags.LOADING_CHATLOG.isRaised() )
+	public static Text modifyMessage(@NotNull Text m) {
+		if( Flags.LOADING_CHATLOG.isRaised() )
 			return m; // cancels modifications when loading the chatlog or regenerating visibles
 
 		boolean lastEmpty = msgData.equals(ChatUtils.NIL_MSG_DATA);
@@ -288,8 +289,8 @@ public class ChatUtils {
 		final MinecraftClient client = MinecraftClient.getInstance();
 		final ChatHud chatHud = client.inGameHud.getChatHud();
 		final ChatHudAccessor chat = ChatHudAccessor.from(chatHud);
-		final List<ChatHudLine> messages = chat.chatpatches$getMessages();
-		final List<ChatHudLine.Visible> visibleMessages = chat.chatpatches$getVisibleMessages();
+		final List<ChatHudLine> messages = chat.getMessages();
+		final List<ChatHudLine.Visible> visibleMessages = chat.getVisibleMessages();
 
 		ChatHudLine comparingLine = messages.get(index); // message being compared
 		List<Text> comparingParts = comparingLine.content().getSiblings();
