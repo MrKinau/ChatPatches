@@ -86,14 +86,6 @@ public abstract class ChatHudMixin implements ChatHudAccessor {
         }
     }
 
-    @ModifyExpressionValue(
-        method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
-        at = @At(value = "CONSTANT", args = "intValue=100")
-    )
-    private int moreMessages(int hundred) {
-        return config.chatMaxMessages;
-    }
-
     /** allows for a chat width larger than 320px */
     @ModifyReturnValue(method = "getWidth()I", at = @At("RETURN"))
     private int moreWidth(int defaultWidth) {
@@ -124,24 +116,6 @@ public abstract class ChatHudMixin implements ChatHudAccessor {
         return e + ( config.shiftChat * this.getChatScale() );
     }
 
-
-    /**
-     * Modifies the incoming message by adding timestamps, nicer
-     * player names, hover events, and duplicate counters in conjunction with
-     * {@link #addCounter(Text, boolean)}.
-     * <br>
-     * See {@link ChatUtils#modifyMessage(Text, boolean)} for detailed
-     * implementation specifications.
-     */
-    @ModifyVariable(
-        method = "addMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/message/MessageSignatureData;ILnet/minecraft/client/gui/hud/MessageIndicator;Z)V",
-        at = @At("HEAD"),
-        argsOnly = true
-    )
-    private Text modifyMessage(Text m, @Local(argsOnly = true) boolean refreshing) {
-        return addCounter(ChatUtils.modifyMessage(m, refreshing), refreshing);
-    }
-
     @Inject(method = "addToMessageHistory", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/collection/ArrayListDeque;size()I"))
     private void addHistory(String message, CallbackInfo ci) {
         if( !Flags.LOADING_CHATLOG.isRaised() )
@@ -155,8 +129,8 @@ public abstract class ChatHudMixin implements ChatHudAccessor {
     }
 
     @Inject(method = "logChatMessage", at = @At("HEAD"), cancellable = true)
-    private void ignoreRestoredMessages(Text message, @Nullable MessageIndicator indicator, CallbackInfo ci) {
-        if( Flags.LOADING_CHATLOG.isRaised() && indicator != null )
+    private void ignoreRestoredMessages(ChatHudLine message, CallbackInfo ci) {
+        if( Flags.LOADING_CHATLOG.isRaised() )
             ci.cancel();
     }
 

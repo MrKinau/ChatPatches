@@ -1,14 +1,14 @@
 package obro1961.chatpatches.chatlog;
 
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
-import com.google.gson.InstanceCreator;
-import com.google.gson.JsonDeserializer;
-import com.google.gson.JsonSerializer;
+import com.google.gson.*;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.gui.hud.MessageIndicator;
 import net.minecraft.client.resource.language.I18n;
+import net.minecraft.command.CommandRegistryAccess;
+import net.minecraft.registry.DynamicRegistryManager;
+import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.text.Text;
 import obro1961.chatpatches.ChatPatches;
 import obro1961.chatpatches.config.Config;
@@ -32,8 +32,8 @@ public class ChatLog {
     public static final MessageIndicator RESTORED_TEXT = new MessageIndicator(0x382fb5, null, null, I18n.translate("text.chatpatches.restored"));
 
     private static final Gson GSON = new com.google.gson.GsonBuilder()
-        .registerTypeAdapter(Text.class, (JsonSerializer<Text>) (src, type, context) -> Text.Serialization.toJsonTree(src))
-        .registerTypeAdapter(Text.class, (JsonDeserializer<Text>) (json, type, context) -> Text.Serialization.fromJsonTree(json))
+        .registerTypeAdapter(Text.class, (JsonSerializer<Text>) (src, type, context) -> JsonParser.parseString(Text.Serialization.toJsonString(src, DynamicRegistryManager.EMPTY)))
+        .registerTypeAdapter(Text.class, (JsonDeserializer<Text>) (json, type, context) -> Text.Serialization.fromJsonTree(json, DynamicRegistryManager.EMPTY))
         .registerTypeAdapter(Text.class, (InstanceCreator<Text>) type -> Text.empty())
     .create();
 

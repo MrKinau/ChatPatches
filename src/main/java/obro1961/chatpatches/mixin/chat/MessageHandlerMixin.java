@@ -42,7 +42,7 @@ public abstract class MessageHandlerMixin {
     @Inject(method = "onChatMessage", at = @At("HEAD"))
     private void cacheChatData(SignedMessage message, GameProfile sender, MessageType.Parameters params, CallbackInfo ci) {
         // only logs the metadata if it was a player-sent message (otherwise tries to format some commands like /msg and /me)
-        if( params.type().chat().translationKey().equals("chat.type.text") )
+        if( params.type().value().chat().translationKey().equals("chat.type.text") )
             ChatPatches.msgData = new ChatUtils.MessageData(sender, Date.from(message.getTimestamp()), true);
         else
             ChatPatches.msgData = ChatUtils.NIL_MSG_DATA;

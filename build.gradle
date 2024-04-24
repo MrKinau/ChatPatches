@@ -6,7 +6,7 @@ import java.util.function.Function
 import java.util.stream.Stream
 
 plugins {
-	id "fabric-loom" version "1.5-SNAPSHOT"
+	id "fabric-loom" version "1.6-SNAPSHOT"
 	id "maven-publish"
 	id "me.modmuss50.mod-publish-plugin" version "0.4.5"
 }
@@ -36,7 +36,7 @@ dependencies {
 	modImplementation "net.fabricmc.fabric-api:fabric-api:$project.api"
 
 	modImplementation "com.terraformersmc:modmenu:$project.modmenu"
-	modImplementation "dev.isxander.yacl:yet-another-config-lib-fabric:$project.yacl"
+	modImplementation "dev.isxander:yet-another-config-lib:$project.yacl-fabric"
 }
 
 processResources {
@@ -78,14 +78,14 @@ processResources {
 }
 
 tasks.withType(JavaCompile).configureEach {
-	it.options.release = 17
+	it.options.release = 21
 }
 
 java {
 	withSourcesJar()
 
-	sourceCompatibility = JavaVersion.VERSION_17
-	targetCompatibility = JavaVersion.VERSION_17
+	sourceCompatibility = JavaVersion.VERSION_21
+	targetCompatibility = JavaVersion.VERSION_21
 }
 
 jar {
@@ -96,7 +96,7 @@ jar {
 
 publishing {
 	publications {
-		mavenJava(MavenPublication) {
+		create("mavenJava", MavenPublication) {
 			from components.java
 		}
 	}

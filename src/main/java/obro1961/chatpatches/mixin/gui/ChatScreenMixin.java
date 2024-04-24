@@ -22,6 +22,7 @@ import net.minecraft.client.network.PlayerListEntry;
 import net.minecraft.client.util.ChatMessages;
 import net.minecraft.client.util.SkinTextures;
 import net.minecraft.network.message.MessageSignatureData;
+import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.text.HoverEvent;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Style;
@@ -177,7 +178,7 @@ public abstract class ChatScreenMixin extends Screen implements ChatScreenAccess
 			// hover menu buttons, column two
 			hoverButtons.put(COPY_RAW_STRING, of(1, COPY_RAW_STRING, () -> Formatting.strip( selectedLine.content().getString() )));
 			hoverButtons.put(COPY_FORMATTED_STRING, of(1, COPY_FORMATTED_STRING, () -> TextUtils.reorder( selectedLine.content().asOrderedText(), true )));
-			hoverButtons.put(COPY_JSON_STRING, of(1, COPY_JSON_STRING, () -> Text.Serialization.toJsonString(selectedLine.content())));
+			hoverButtons.put(COPY_JSON_STRING, of(1, COPY_JSON_STRING, () -> Text.Serialization.toJsonString(selectedLine.content(), DynamicRegistryManager.EMPTY)));
 			hoverButtons.put(COPY_LINK_N.apply(0), of(1, COPY_LINK_N.apply(0), () -> ""));
 			hoverButtons.put(COPY_TIMESTAMP_TEXT, of(1, COPY_TIMESTAMP_TEXT, () -> getPart(selectedLine.content(), TIMESTAMP_INDEX).getString()));
 			hoverButtons.put(COPY_TIMESTAMP_HOVER_TEXT, of(1, COPY_TIMESTAMP_HOVER_TEXT, () -> {
